@@ -18,7 +18,7 @@ void main() async {
           ? 'http://localhost:9000'
           : 'https://niyejan-97e62-default-rtdb.firebaseio.com',
     ),
-  );//initializing firebase
+  ); //initializing firebase
   runApp(MyApp());
 }
 

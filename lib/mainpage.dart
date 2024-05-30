@@ -15,8 +15,7 @@ class _MainpageState extends State<Mainpage> {
     return Scaffold(
       appBar: AppBar(
         title:const Text('Main Page'),
-        backgroundColor: Color.fromARGB(255, 136, 120, 28)
-      ),
+        backgroundColor: Color.fromARGB(255, 22, 146, 228)      ),
       body: Center(
         child: MaterialButton(
           onPressed: () {
@@ -25,7 +24,7 @@ class _MainpageState extends State<Mainpage> {
           },
           height: 50,
           minWidth: 300,
-          color: Colors.blue,
+          color: Color.fromARGB(255, 16, 221, 95),
           child: const Text('Click Me'),
         ),
       ),
