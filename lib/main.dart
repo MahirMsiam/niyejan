@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:niyejan/MainPage.dart';
+import 'package:niyejan/Screens/lgin.dart';
 
 // ignore: constant_identifier_names
 const USE_DATABASE_EMULATOR = false;
@@ -30,9 +31,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-          //primarySwatch: Colors.blue,
+          fontFamily: 'Brand-Regular',
           ),
-      home: const Mainpage(),
+      home: const Lgin(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
