@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:niyejan/brand_colors.dart';
+import 'package:niyejan/Widget/TaxiButton.dart';
 
 class Lgin extends StatelessWidget {
   const Lgin({Key? key}) : super(key: key);
+  static const String id = 'login';
 
   @override
   Widget build(BuildContext context) {
@@ -70,33 +72,20 @@ class Lgin extends StatelessWidget {
                     SizedBox(
                       height: 40,
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        print('Login Button Clicked');
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(BrandColors.colorGreen),
-                      ),
-                      child: Container(
-                        height: 50,
-                        child: Center(
-                          child: Text(
-                            'LOGIN',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: 'Brand-Bold',
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
+                    TaxiButton(
+                      title: 'LOGIN',
+                      color: BrandColors.colorGreen,
+                      onPressed: () {},
                     ),
                   ],
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, 'register', (route) => false);
+                  
+                },
                 child: Text('Do not have an account? Register Here'),
               ),
             ]),
@@ -106,3 +95,4 @@ class Lgin extends StatelessWidget {
     );
   }
 }
+

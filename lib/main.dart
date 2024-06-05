@@ -1,7 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:niyejan/MainPage.dart';
 import 'package:niyejan/Screens/lgin.dart';
+import 'package:niyejan/Screens/reg.dart';
+import 'package:niyejan/mainpage.dart';
 
 // ignore: constant_identifier_names
 const USE_DATABASE_EMULATOR = false;
@@ -24,16 +25,19 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // const MyApp({super.key});
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-          fontFamily: 'Brand-Regular',
-          ),
-      home: const Lgin(),
+        fontFamily: 'Brand-Regular',
+      ),
+      initialRoute: RegistrationPage.id,
+      routes: {
+        RegistrationPage.id: (context) => RegistrationPage(),
+        Lgin.id: (context) => Lgin(),
+        Mainpage.id: (context) => Mainpage(),
+      },
       debugShowCheckedModeBanner: false,
     );
   }
