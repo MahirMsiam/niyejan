@@ -4,19 +4,28 @@ import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:niyejan/Widget/TaxiButton.dart';
 import 'package:niyejan/brand_colors.dart';
 
 // ignore: use_key_in_widget_constructors
-class RegistrationPage extends StatelessWidget {
+class RegistrationPage extends StatefulWidget {
   static const String id = 'register';
 
+  @override
+  State<RegistrationPage> createState() => _RegistrationPageState();
+}
+
+class _RegistrationPageState extends State<RegistrationPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   var fullnameController = TextEditingController();
+
   var emailController = TextEditingController();
+
   var phoneController = TextEditingController();
+
   var passwordController = TextEditingController();
 
   Future<User?> createUserWithEmailAndPassword(
@@ -29,12 +38,24 @@ class RegistrationPage extends StatelessWidget {
         await newUser.updateProfile(displayName: fullname);
         await newUser.reload();
         User? updatedUser = _auth.currentUser;
+
+        DatabaseReference newUserRef =
+            FirebaseDatabase.instance.ref().child('users/${newUser.uid}');
+        Map userMap = {
+          'fullname': fullnameController.text,
+          'email': emailController.text,
+          'phone': phoneController.text,
+        };
+        newUserRef.set(userMap);
+
+        // Navigate to main page
+        Navigator.pushNamedAndRemoveUntil(
+            context, 'mainpage', (route) => false);
         return updatedUser;
-        print('User created');
       }
       return newUser;
     } catch (e) {
-      print(e);
+      print('Error: $e');
       return null;
     }
   }
