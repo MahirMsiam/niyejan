@@ -2,6 +2,7 @@
 
 import 'dart:math';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -169,7 +170,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     TaxiButton(
                       title: 'REGISTER',
                       color: BrandColors.colorGreen,
-                      onPressed: () {
+                      onPressed: () async {
+                        //check for valid network connection
+                        var connectivityResult =
+                            await Connectivity().checkConnectivity();
+                        if (connectivityResult != ConnectivityResult.mobile &&
+                            connectivityResult != ConnectivityResult.wifi) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('No internet connection'),
+                            ),
+                          );
+                          return;
+                        }
                         // Check for valid inputs
                         if (fullnameController.text.length < 3) {
                           ScaffoldMessenger.of(context).showSnackBar(
