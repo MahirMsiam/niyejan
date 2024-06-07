@@ -1,12 +1,66 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:io';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:niyejan/brand_colors.dart';
 import 'package:niyejan/Widget/TaxiButton.dart';
 
-class Lgin extends StatelessWidget {
-  const Lgin({Key? key}) : super(key: key);
+class Lgin extends StatefulWidget {
+  Lgin({Key? key}) : super(key: key);
   static const String id = 'login';
+
+  @override
+  State<Lgin> createState() => _LginState();
+}
+
+class _LginState extends State<Lgin> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  var emailController = TextEditingController();
+
+  var passwordController = TextEditingController();
+
+  //method for user login using email and password
+  void login() async {
+    try {
+      final UserCredential userCredential =
+          await _auth.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      if (userCredential.user != null) {
+        //verify login
+        DatabaseReference newUserRef = FirebaseDatabase.instance
+            .ref()
+            .child('users/${userCredential.user!.uid}');
+        newUserRef.once().then((DatabaseEvent snapshot) {
+          if (snapshot.snapshot.value != null) {
+            Navigator.pushNamedAndRemoveUntil(
+                context, 'mainpage', (route) => false);
+          }
+        });
+      }
+      print('User: ${userCredential.user!.uid}');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('No user found for that email.'),
+          ),
+        );
+      } else if (e.code == 'wrong-password') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Wrong password provided for that user.'),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +93,7 @@ class Lgin extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     TextField(
+                      controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         labelText: 'Email',
@@ -56,6 +111,7 @@ class Lgin extends StatelessWidget {
                       height: 10,
                     ),
                     TextField(
+                      controller: passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Password',
@@ -75,7 +131,68 @@ class Lgin extends StatelessWidget {
                     TaxiButton(
                       title: 'LOGIN',
                       color: BrandColors.colorGreen,
-                      onPressed: () {},
+                      onPressed: () async {
+                        //check for network connectivity
+                        // var connectivityResult =
+                        //     await Connectivity().checkConnectivity();
+                        // if (connectivityResult != ConnectivityResult.mobile &&
+                        //     connectivityResult != ConnectivityResult.wifi) {
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     SnackBar(
+                        //       content: Text('No network connection'),
+                        //     ),
+                        //   );
+                        //   return;
+                        // }
+
+                        // try {
+                        //   final result =
+                        //       await InternetAddress.lookup('google.com');
+                        //   if (result.isEmpty || result[0].rawAddress.isEmpty) {
+                        //     throw SocketException('No Internet');
+                        //   }
+                        //   // Internet connected
+                        //   // Continue with your registration process
+                        // } on SocketException catch (_) {
+                        //   // No internet connected
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     SnackBar(
+                        //       content: Text('No internet connection'),
+                        //     ),
+                        //   );
+                        //   return;
+                        // }
+                        //check end
+                        //input validation
+                        if (!emailController.text.contains('@')) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content:
+                                  Text('Please enter a valid email address'),
+                            ),
+                          );
+                          return;
+                        }
+                        if (!passwordController.text.isNotEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Please enter a password'),
+                            ),
+                          );
+                          return;
+                        }
+                        if (passwordController.text.length < 8) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  'Password must be at least 8 characters'),
+                            ),
+                          );
+                          return;
+                        }
+                        //input validation end
+                        login();
+                      },
                     ),
                   ],
                 ),
@@ -84,7 +201,6 @@ class Lgin extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushNamedAndRemoveUntil(
                       context, 'register', (route) => false);
-                  
                 },
                 child: Text('Do not have an account? Register Here'),
               ),
@@ -95,4 +211,3 @@ class Lgin extends StatelessWidget {
     );
   }
 }
-

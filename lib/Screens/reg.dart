@@ -1,10 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:math';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:niyejan/Widget/TaxiButton.dart';
@@ -172,17 +171,35 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       color: BrandColors.colorGreen,
                       onPressed: () async {
                         //check for valid network connection
-                        var connectivityResult =
-                            await Connectivity().checkConnectivity();
-                        if (connectivityResult != ConnectivityResult.mobile &&
-                            connectivityResult != ConnectivityResult.wifi) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('No internet connection'),
-                            ),
-                          );
-                          return;
-                        }
+                        // var connectivityResult =
+                        //     await Connectivity().checkConnectivity();
+                        // if (connectivityResult != ConnectivityResult.mobile &&
+                        //     connectivityResult != ConnectivityResult.wifi) {
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     SnackBar(
+                        //       content: Text('No network connection'),
+                        //     ),
+                        //   );
+                        //   return;
+                        // }
+
+                        // try {
+                        //   final result =
+                        //       await InternetAddress.lookup('google.com');
+                        //   if (result.isEmpty || result[0].rawAddress.isEmpty) {
+                        //     throw SocketException('No Internet');
+                        //   }
+                        //   // Internet connected
+                        //   // Continue with your registration process
+                        // } on SocketException catch (_) {
+                        //   // No internet connected
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     SnackBar(
+                        //       content: Text('No internet connection'),
+                        //     ),
+                        //   );
+                        //   return;
+                        // }
                         // Check for valid inputs
                         if (fullnameController.text.length < 3) {
                           ScaffoldMessenger.of(context).showSnackBar(
