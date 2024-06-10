@@ -47,6 +47,22 @@ class _RegistrationPageState extends State<RegistrationPage> {
           'phone': phoneController.text,
         };
         newUserRef.set(userMap);
+        // showDialog(
+        //   context: context,
+        //   barrierDismissible: false,
+        //   builder: (BuildContext context) => AlertDialog(
+        //     title: Text('Account created successfully'),
+        //     content: Text('Your account has been created successfully'),
+        //     actions: <Widget>[
+        //       TextButton(
+        //         onPressed: () {
+        //           Navigator.of(context).pop();
+        //         },
+        //         child: Text('OK'),
+        //       ),
+        //     ],
+        //   ),
+        // );
 
         // Navigate to main page
         Navigator.pushNamedAndRemoveUntil(
@@ -55,6 +71,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       }
       return newUser;
     } catch (e) {
+      Navigator.pop(context);
       print('Error: $e');
       return null;
     }

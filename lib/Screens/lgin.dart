@@ -8,6 +8,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:niyejan/brand_colors.dart';
 import 'package:niyejan/Widget/TaxiButton.dart';
+import 'package:niyejan/Widget/progressdialogue.dart';
 
 class Lgin extends StatefulWidget {
   Lgin({Key? key}) : super(key: key);
@@ -26,6 +27,15 @@ class _LginState extends State<Lgin> {
 
   //method for user login using email and password
   void login() async {
+    //show please wait dialogue
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) => Progressdialogue(
+        status: 'Logging you in',
+      ),
+    );
+
     try {
       final UserCredential userCredential =
           await _auth.signInWithEmailAndPassword(
@@ -39,6 +49,7 @@ class _LginState extends State<Lgin> {
             .child('users/${userCredential.user!.uid}');
         newUserRef.once().then((DatabaseEvent snapshot) {
           if (snapshot.snapshot.value != null) {
+            Navigator.pop(context);
             Navigator.pushNamedAndRemoveUntil(
                 context, 'mainpage', (route) => false);
           }
@@ -59,8 +70,12 @@ class _LginState extends State<Lgin> {
           ),
         );
       }
+    } finally {
+      Navigator.pop(context);
     }
   }
+
+  //please wait dialogue
 
   @override
   Widget build(BuildContext context) {
