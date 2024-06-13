@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Brand-Regular',
       ),
-      initialRoute: RegistrationPage.id,
+      initialRoute: Mainpage.id,
       routes: {
         RegistrationPage.id: (context) => RegistrationPage(),
         Lgin.id: (context) => Lgin(),

@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Mainpage extends StatefulWidget {
   static const String id = 'mainpage';
@@ -10,25 +13,36 @@ class Mainpage extends StatefulWidget {
 }
 
 class _MainpageState extends State<Mainpage> {
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
+  late GoogleMapController mapController;
+
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
+
+  static const CameraPosition _kLake = CameraPosition(
+      bearing: 192.8334901395799,
+      target: LatLng(37.43296265331129, -122.08832357078792),
+      tilt: 59.440717697143555,
+      zoom: 19.151926040649414);
+
   @override
-  
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title:const Text('Main Page'),
-        backgroundColor: Color.fromARGB(255, 22, 146, 228)      ),
       body: Center(
-        child: MaterialButton(
-          onPressed: () {
-            DatabaseReference dbRef = FirebaseDatabase.instance.ref().child("message");
-            dbRef.set("Connected to Firebase Database");
+          child: Stack(children: <Widget>[
+        GoogleMap(
+          mapType: MapType.normal,
+          myLocationButtonEnabled: true,
+          initialCameraPosition: _kGooglePlex,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+            mapController = controller;
           },
-          height: 50,
-          minWidth: 300,
-          color: Color.fromARGB(255, 16, 221, 95),
-          child: const Text('Click Me'),
-        ),
-      ),
+        )
+      ])),
     );
   }
 }
