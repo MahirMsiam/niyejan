@@ -1,12 +1,16 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'dart:async';
 
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:niyejan/Widget/BrandDivider.dart';
+import 'package:niyejan/brand_colors.dart';
+import 'package:outline_material_icons/outline_material_icons.dart';
 
 class Mainpage extends StatefulWidget {
   static const String id = 'mainpage';
-  const Mainpage({super.key});
+  Mainpage({Key? key}) : super(key: key);
 
   @override
   State<Mainpage> createState() => _MainpageState();
@@ -41,7 +45,7 @@ class _MainpageState extends State<Mainpage> {
             _controller.complete(controller);
             mapController = controller;
           },
-        )
+        ),
       ])),
     );
   }
