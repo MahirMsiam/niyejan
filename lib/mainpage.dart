@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'dart:async';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:niyejan/Widget/BrandDivider.dart';
@@ -17,9 +17,11 @@ class Mainpage extends StatefulWidget {
 }
 
 class _MainpageState extends State<Mainpage> {
+  double mapBottomPadding = 0;
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   late GoogleMapController mapController;
+ double searchSheetHeight = (Platform.isIOS)?300:275;
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -38,14 +40,148 @@ class _MainpageState extends State<Mainpage> {
       body: Center(
           child: Stack(children: <Widget>[
         GoogleMap(
+          padding: EdgeInsets.only(bottom: mapBottomPadding),
           mapType: MapType.normal,
           myLocationButtonEnabled: true,
           initialCameraPosition: _kGooglePlex,
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
             mapController = controller;
+            setState(() {
+              mapBottomPadding = (Platform.isAndroid) ? 280 : 270;
+            });
           },
         ),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: Container(
+            height: searchSheetHeight,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black,
+                    blurRadius: 16.0,
+                    spreadRadius: 0.4,
+                    offset: Offset(0.7, 0.7),
+                  )
+                ]),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    'Hi there',
+                    style: TextStyle(fontSize: 10),
+                  ),
+                  Text(
+                    'Where are you going',
+                    style: TextStyle(fontSize: 18, fontFamily: 'Brand-Bold'),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(4),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 5.0,
+                              spreadRadius: 0.5,
+                              offset: Offset(0.7, 0.7))
+                        ]),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.search,
+                            color: Colors.blueAccent,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text('Search Destination'),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 22,
+                  ),
+                  //HOME
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        OMIcons.home,
+                        color: BrandColors.colorDimText,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text('Add Home'),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          Text(
+                            'Your residential address',
+                            style: TextStyle(
+                                fontSize: 11, color: BrandColors.colorDimText),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Branddivider(),
+                  //WORK
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        OMIcons.workOutline,
+                        color: BrandColors.colorDimText,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text('Add work'),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          Text(
+                            'Your Office address address',
+                            style: TextStyle(
+                                fontSize: 11, color: BrandColors.colorDimText),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )
       ])),
     );
   }
