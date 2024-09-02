@@ -2,10 +2,12 @@
 
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:niyejan/Widget/BrandDivider.dart';
 import 'package:niyejan/brand_colors.dart';
+import 'package:niyejan/styles/style.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 
 class Mainpage extends StatefulWidget {
@@ -17,11 +19,12 @@ class Mainpage extends StatefulWidget {
 }
 
 class _MainpageState extends State<Mainpage> {
+  GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   double mapBottomPadding = 0;
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   late GoogleMapController mapController;
- double searchSheetHeight = (Platform.isIOS)?300:275;
+  double searchSheetHeight = (Platform.isIOS) ? 300 : 275;
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -37,6 +40,71 @@ class _MainpageState extends State<Mainpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
+      drawer: Container(
+        width: 250,
+        color: Colors.white,
+        child: Drawer(
+          child: ListView(
+            padding: EdgeInsets.all(0),
+            children: <Widget>[
+              Container(
+                height: 160,
+                color: Colors.white,
+                child: DrawerHeader(
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Row(
+                    children: <Widget>[
+                      Image.asset(
+                        'images/user_icon.png',
+                        height: 60,
+                        width: 60,
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'Profile Name',
+                            style: TextStyle(
+                                fontSize: 20, fontFamily: 'Brand-Bold'),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Branddivider(),
+              SizedBox(height: 10,),
+              ListTile(
+                leading: Icon(OMIcons.cardGiftcard),
+                title: Text('Free Rides', style: kDrawerItemStyle,),
+              ),
+              ListTile(
+                leading: Icon(OMIcons.creditCard),
+                title: Text('Payments', style: kDrawerItemStyle,),
+              ),
+              ListTile(
+                leading: Icon(OMIcons.history),
+                title: Text('Ride History', style: kDrawerItemStyle,),
+              ),
+              ListTile(
+                leading: Icon(OMIcons.contactSupport),
+                title: Text('Support', style: kDrawerItemStyle,),
+              ),
+              ListTile(
+                leading: Icon(OMIcons.info),
+                title: Text('About', style: kDrawerItemStyle,),
+              ),
+
+
+            ],
+          ),
+        ),
+      ),
       body: Center(
           child: Stack(children: <Widget>[
         GoogleMap(
@@ -52,6 +120,38 @@ class _MainpageState extends State<Mainpage> {
             });
           },
         ),
+        //Menu Button
+        Positioned(
+          top: 44,
+          left: 20,
+          child: GestureDetector(
+            onTap: () {
+              scaffoldKey.currentState!.openDrawer();
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 5.0,
+                        spreadRadius: 0.5,
+                        offset: Offset(0.7, 0.7))
+                  ]),
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 20,
+                child: Icon(Icons.menu),
+              ),
+            ),
+          ),
+        ),
+
+
+
+
+        //Search Sheet//
         Positioned(
           left: 0,
           right: 0,
